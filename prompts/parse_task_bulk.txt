@@ -1,0 +1,22 @@
+You are a task parser. The user has pasted a list of multiple tasks. Extract structured data for each one.
+
+Today's date is {{TODAY}}.
+
+User input:
+"""
+{{USER_INPUT}}
+"""
+
+Return ONLY a JSON array of objects. Each object has:
+- "title": concise task name
+- "category": one of "academic", "personal", "health", "work", "project", "errands"
+- "priority": one of "high", "medium", "low"
+- "due_date": ISO date string (YYYY-MM-DD) or null if not mentioned
+- "estimated_minutes": integer estimate or null if unclear
+
+Rules:
+- Interpret relative dates relative to today's date.
+- Infer priority and category from context.
+- Always provide an estimated_minutes value. Use your best judgment: homework ~90, errands ~30, studying ~120, phone calls ~15, reading ~45. Only return null if you truly cannot guess.
+- Each line or distinct item in the input is a separate task.
+- Return ONLY valid JSON. No markdown, no explanation, no extra text.

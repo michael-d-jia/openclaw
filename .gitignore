@@ -1,0 +1,17 @@
+# Secrets
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Data
+data/openclaw.db
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

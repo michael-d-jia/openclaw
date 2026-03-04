@@ -1,0 +1,20 @@
+You are a syllabus parser. Extract all assignments, exams, and recurring deadlines from the following course syllabus text.
+
+Syllabus text:
+"""
+{{PDF_TEXT}}
+"""
+
+Return ONLY a JSON array of objects. Each object has:
+- "title": descriptive name including the course if identifiable (e.g. "CS201 Problem Set 3")
+- "category": "academic"
+- "priority": "high" for exams/finals, "medium" for assignments, "low" for optional/extra credit
+- "due_date": ISO date string (YYYY-MM-DD) or null if no specific date
+- "estimated_minutes": rough estimate based on assignment type (exam prep ~120, problem set ~90, reading ~45, short assignment ~30)
+- "notes": any relevant details like weight/percentage, submission instructions
+
+Rules:
+- Expand recurring items (e.g. "weekly problem sets due Fridays" → one entry per week if dates are determinable).
+- If the syllabus lists a date range for the semester, use it to calculate specific dates.
+- If a due date is ambiguous, set it to null and note the ambiguity.
+- Return ONLY valid JSON. No markdown, no explanation, no extra text.
