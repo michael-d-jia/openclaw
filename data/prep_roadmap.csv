@@ -1,6 +1,40 @@
 date,topic,leetcode_url,status
-2026-03-03,Arrays,https://leetcode.com/problems/two-sum/,Complete
-2026-03-04,Arrays,https://leetcode.com/problems/best-time-to-buy-and-sell-stock/,Pending
-2026-03-05,Linked Lists,https://leetcode.com/problems/reverse-linked-list/,Pending
-2026-03-06,Trees,https://leetcode.com/problems/maximum-depth-of-binary-tree/,Pending
-2026-03-07,Dynamic Programming,https://leetcode.com/problems/climbing-stairs/,Pending
+2026-03-06,Monotonic Stack,https://leetcode.com/problems/daily-temperatures/,Pending
+2026-03-07,Tree DFS,https://leetcode.com/problems/maximum-depth-of-binary-tree/,Pending
+2026-03-08,Tree DFS,https://leetcode.com/problems/invert-binary-tree/,Pending
+2026-03-09,Sliding Window,https://leetcode.com/problems/longest-substring-without-repeating-characters/,Pending
+2026-03-10,Linked List,https://leetcode.com/problems/reverse-linked-list/,Pending
+2026-03-11,Tree BFS,https://leetcode.com/problems/binary-tree-level-order-traversal/,Pending
+2026-03-12,Two Pointers,https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/,Pending
+2026-03-13,Two Pointers,https://leetcode.com/problems/3sum/,Pending
+2026-03-14,Two Pointers,https://leetcode.com/problems/container-with-most-water/,Pending
+2026-03-15,Linked List,https://leetcode.com/problems/merge-two-sorted-lists/,Pending
+2026-03-16,Linked List,https://leetcode.com/problems/linked-list-cycle/,Pending
+2026-03-17,Linked List,https://leetcode.com/problems/middle-of-the-linked-list/,Pending
+2026-03-18,Heap,https://leetcode.com/problems/kth-largest-element-in-a-stream/,Pending
+2026-03-19,Heap,https://leetcode.com/problems/kth-largest-element-in-an-array/,Pending
+2026-03-20,Heap + HashMap,https://leetcode.com/problems/top-k-frequent-elements/,Pending
+2026-03-21,Heap + Linked List,https://leetcode.com/problems/merge-k-sorted-lists/,Pending
+2026-03-22,DP,https://leetcode.com/problems/climbing-stairs/,Pending
+2026-03-23,DP,https://leetcode.com/problems/house-robber/,Pending
+2026-03-24,DP,https://leetcode.com/problems/coin-change/,Pending
+2026-03-25,DP,https://leetcode.com/problems/longest-increasing-subsequence/,Pending
+2026-03-26,DP,https://leetcode.com/problems/maximum-subarray/,Pending
+2026-03-27,DP,https://leetcode.com/problems/maximum-product-subarray/,Pending
+2026-03-28,Graph BFS/DFS,https://leetcode.com/problems/number-of-islands/,Pending
+2026-03-29,Graph Traversal,https://leetcode.com/problems/clone-graph/,Pending
+2026-03-30,Topological Sort,https://leetcode.com/problems/course-schedule/,Pending
+2026-03-31,Graph BFS,https://leetcode.com/problems/rotting-oranges/,Pending
+2026-04-01,Backtracking,https://leetcode.com/problems/subsets/,Pending
+2026-04-02,Backtracking,https://leetcode.com/problems/permutations/,Pending
+2026-04-03,Backtracking,https://leetcode.com/problems/combination-sum/,Pending
+2026-04-04,Backtracking,https://leetcode.com/problems/word-search/,Pending
+2026-03-01,HashMap,https://leetcode.com/problems/two-sum/,Complete
+2026-03-01,HashSet,https://leetcode.com/problems/contains-duplicate/,Complete
+2026-03-01,HashMap,https://leetcode.com/problems/valid-anagram/,Complete
+2026-03-01,HashMap + Sorting,https://leetcode.com/problems/group-anagrams/,Complete
+2026-03-01,Stack,https://leetcode.com/problems/valid-parentheses/,Complete
+2026-03-01,Stack Design,https://leetcode.com/problems/min-stack/,Complete
+2026-03-01,Two Pointers / String,https://leetcode.com/problems/valid-palindrome/,Complete
+2026-03-01,Binary Search,https://leetcode.com/problems/binary-search/,Complete
+2026-03-01,Binary Search,https://leetcode.com/problems/search-insert-position/,Complete
