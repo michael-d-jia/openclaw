@@ -8,6 +8,7 @@ __pycache__/
 
 # Data
 data/openclaw.db
+data/leetcode_solutions/
 
 # macOS
 .DS_Store

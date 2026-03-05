@@ -29,12 +29,11 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # Git helpers
 # ---------------------------------------------------------------------------
 def git_commit_and_push(filepath, message):
-    """Stage a file, commit, and push. Runs from the project root."""
-    root = Path(__file__).parent.parent
+    """Stage a file, commit, and push from the leetcode_solutions directory."""
     try:
-        subprocess.run(["git", "add", str(filepath)], cwd=root, check=True, capture_output=True)
-        subprocess.run(["git", "commit", "-m", message], cwd=root, check=True, capture_output=True)
-        subprocess.run(["git", "push"], cwd=root, check=True, capture_output=True)
+        subprocess.run(["git", "add", filepath.name], cwd=OUTPUT_DIR, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", message], cwd=OUTPUT_DIR, check=True, capture_output=True)
+        subprocess.run(["git", "push", "-u", "origin", "main"], cwd=OUTPUT_DIR, check=True, capture_output=True)
         return True, None
     except subprocess.CalledProcessError as e:
         return False, e.stderr.decode().strip()
