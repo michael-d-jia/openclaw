@@ -75,13 +75,14 @@ async def morning_prep():
         if not result:
             await ch.send("☀️ **Morning Prep** — No pending problems. You're all caught up!")
             return
+        push_status = "✅ Pushed to GitHub" if result["pushed"] else f"⚠️ Git push failed: {result['push_error']}"
         msg = (
             f"☀️ **Morning Prep**\n\n"
             f"**{result['title']}** ({result['difficulty']})\n"
             f"Topic: {result['topic']}\n"
             f"Link: {result['url']}\n"
-            f"File: `{result['filepath']}`\n\n"
-            f"Good luck! Type `!push` when you're done."
+            f"{push_status}\n\n"
+            f"Run `git pull` to get the starter file, then `!push` when you're done."
         )
         await ch.send(msg)
     except Exception as e:
@@ -276,21 +277,17 @@ async def plan(ctx):
 # ---------------------------------------------------------------------------
 @bot.command()
 async def push(ctx):
-    """Mark today's problem complete. Git push is a stub until SSH is set up."""
-    await ctx.send("⏳ Pushing...")
+    """Mark current LeetCode problem as complete."""
     try:
-        result = run_morning_prep.__wrapped__ if hasattr(run_morning_prep, '__wrapped__') else None
-        # For now, get the current pending problem and mark it complete
         from workflows.prep_pipeline import get_next_pending
         row = get_next_pending()
         if not row:
-            await ctx.send("❌ No pending problem to push.")
+            await ctx.send("❌ No pending problem to mark complete.")
             return
         mark_complete(row["leetcode_url"])
-        # TODO: plug in ssh_bridge.git_push()
-        await ctx.send(f"✅ Marked **{row['topic']}** problem as complete. (Git push is a stub until SSH is set up.)")
+        await ctx.send(f"✅ Marked **{row['topic']}** problem as complete. Nice work!")
     except Exception as e:
-        await ctx.send(f"❌ Push failed: {e}")
+        await ctx.send(f"❌ Failed: {e}")
 
 @bot.command()
 async def status(ctx):

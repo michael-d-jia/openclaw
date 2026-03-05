@@ -1,10 +1,12 @@
 """
 Technical interview prep pipeline.
-Reads the roadmap CSV, fetches LeetCode problems, generates starter files.
+Reads the roadmap CSV, fetches LeetCode problems, generates starter files,
+and pushes to GitHub.
 """
 import csv
 import re
 import html
+import subprocess
 import requests
 from pathlib import Path
 
@@ -22,6 +24,20 @@ OUTPUT_DIR = DATA_DIR / "leetcode_solutions"
 
 # Ensure output dir exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# ---------------------------------------------------------------------------
+# Git helpers
+# ---------------------------------------------------------------------------
+def git_commit_and_push(filepath, message):
+    """Stage a file, commit, and push. Runs from the project root."""
+    root = Path(__file__).parent.parent
+    try:
+        subprocess.run(["git", "add", str(filepath)], cwd=root, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", message], cwd=root, check=True, capture_output=True)
+        subprocess.run(["git", "push"], cwd=root, check=True, capture_output=True)
+        return True, None
+    except subprocess.CalledProcessError as e:
+        return False, e.stderr.decode().strip()
 
 # ---------------------------------------------------------------------------
 # CSV helpers
@@ -146,6 +162,12 @@ def run_morning_prep():
     problem = fetch_problem(row["leetcode_url"])
     filepath, _ = generate_problem_file(problem, row["topic"])
 
+    # Auto-commit and push the generated file to GitHub
+    success, error = git_commit_and_push(
+        filepath,
+        f"Add starter: {problem['title']} ({row['topic']})"
+    )
+
     return {
         "title": problem["title"],
         "difficulty": problem["difficulty"],
@@ -153,4 +175,6 @@ def run_morning_prep():
         "url": row["leetcode_url"].strip(),
         "filepath": str(filepath),
         "slug": problem["slug"],
-    }   
+        "pushed": success,
+        "push_error": error,
+    }
