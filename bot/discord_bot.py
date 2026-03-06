@@ -75,7 +75,10 @@ async def morning_prep():
         if not result:
             await ch.send("☀️ **Morning Prep** — No pending problems. You're all caught up!")
             return
-        push_status = "✅ Pushed to GitHub" if result["pushed"] else f"⚠️ Git push failed: {result['push_error']}"
+        if result["is_new"]:
+            push_status = "✅ Pushed to GitHub" if result["pushed"] else f"⚠️ Git push failed: {result['push_error']}"
+        else:
+            push_status = "📌 File already on GitHub from yesterday"
         msg = (
             f"☀️ **Morning Prep**\n\n"
             f"**{result['title']}** ({result['difficulty']})\n"
@@ -317,12 +320,7 @@ async def roadmap(ctx):
     if len(pending) > 10:
         lines.append(f"\n...and {len(pending) - 10} more pending.")
     await ctx.send("\n".join(lines))
-@bot.command()
-async def testprep(ctx):
-    """Manually trigger morning prep for testing."""
-    await ctx.send("🧪 Running morning prep...")
-    await morning_prep()
-    await ctx.send("🧪 Done.")
+
 # ---------------------------------------------------------------------------
 # Attachment handler — syllabus PDF ingestion
 # ---------------------------------------------------------------------------

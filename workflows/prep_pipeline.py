@@ -138,16 +138,21 @@ def fetch_problem(url):
 # File generation
 # ---------------------------------------------------------------------------
 def generate_problem_file(problem, topic):
-    """Call Gemini to generate a Python starter file. Returns (filepath, content)."""
+    """Call Gemini to generate a Java starter file. Returns (filepath, content, is_new)."""
+    filename = f"{problem['slug'].replace('-', '_')}.java"
+    filepath = OUTPUT_DIR / filename
+
+    # Skip generation if file already exists
+    if filepath.exists():
+        return filepath, filepath.read_text(), False
+
     content = generate_leetcode_file(
         problem_title=problem["title"],
         problem_description=problem["description"],
         topic=topic,
     )
-    filename = f"{problem['slug'].replace('-', '_')}.java"
-    filepath = OUTPUT_DIR / filename
     filepath.write_text(content)
-    return filepath, content
+    return filepath, content, True
 
 # ---------------------------------------------------------------------------
 # Main pipeline — called by cron or manually
@@ -159,13 +164,15 @@ def run_morning_prep():
         return None
 
     problem = fetch_problem(row["leetcode_url"])
-    filepath, _ = generate_problem_file(problem, row["topic"])
+    filepath, _, is_new = generate_problem_file(problem, row["topic"])
 
-    # Auto-commit and push the generated file to GitHub
-    success, error = git_commit_and_push(
-        filepath,
-        f"Add starter: {problem['title']} ({row['topic']})"
-    )
+    # Only push if this is a newly generated file
+    success, error = True, None
+    if is_new:
+        success, error = git_commit_and_push(
+            filepath,
+            f"Add starter: {problem['title']} ({row['topic']})"
+        )
 
     return {
         "title": problem["title"],
@@ -176,4 +183,5 @@ def run_morning_prep():
         "slug": problem["slug"],
         "pushed": success,
         "push_error": error,
+        "is_new": is_new,
     }
