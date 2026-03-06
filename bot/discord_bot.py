@@ -317,7 +317,12 @@ async def roadmap(ctx):
     if len(pending) > 10:
         lines.append(f"\n...and {len(pending) - 10} more pending.")
     await ctx.send("\n".join(lines))
-
+@bot.command()
+async def testprep(ctx):
+    """Manually trigger morning prep for testing."""
+    await ctx.send("🧪 Running morning prep...")
+    await morning_prep()
+    await ctx.send("🧪 Done.")
 # ---------------------------------------------------------------------------
 # Attachment handler — syllabus PDF ingestion
 # ---------------------------------------------------------------------------
