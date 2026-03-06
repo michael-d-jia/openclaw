@@ -144,7 +144,7 @@ def generate_problem_file(problem, topic):
         problem_description=problem["description"],
         topic=topic,
     )
-    filename = f"{problem['slug'].replace('-', '_')}.py"
+    filename = f"{problem['slug'].replace('-', '_')}.java"
     filepath = OUTPUT_DIR / filename
     filepath.write_text(content)
     return filepath, content

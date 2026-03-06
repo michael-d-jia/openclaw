@@ -1,4 +1,4 @@
-Generate a Python file for the following LeetCode problem. The file should help someone practice solving it from scratch.
+Generate a Java file for the following LeetCode problem. The file should help someone practice solving it from scratch.
 
 Problem: {{TITLE}}
 Topic: {{TOPIC}}
@@ -7,10 +7,10 @@ Description:
 {{DESCRIPTION}}
 """
 
-Return ONLY a valid Python file with:
-1. A module docstring containing the problem title, topic, and full description
-2. The function signature with type hints matching the problem
-3. The function body containing only `pass`
-4. 3-5 test cases in an `if __name__ == "__main__"` block using assert statements, based on the examples in the problem description
+Return ONLY a valid Java file with:
+1. A class named Solution with a block comment containing the problem title, topic, and full description
+2. The method signature with correct types matching the problem
+3. The method body containing only a placeholder return statement (e.g. return 0, return null, return false)
+4. A main method with 3-5 test cases based on the examples in the problem description, printing PASS/FAIL for each
 
-Do not include any solution logic. Do not include any markdown fences. Return raw Python code only.
+Do not include any solution logic. Do not include any markdown fences. Return raw Java code only.
