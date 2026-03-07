@@ -37,10 +37,9 @@ scheduler = AsyncIOScheduler(timezone="America/New_York")
 # ---------------------------------------------------------------------------
 def format_task(t):
     """One-line summary of a task for Discord."""
-    due = t["due_date"] or "no date"
-    mins = f"{t['estimated_minutes']}m" if t.get("estimated_minutes") else "?"
     pri = {"high": "🔴", "medium": "🟡", "low": "🟢"}.get(t["priority"], "⚪")
-    return f"`#{t['id']}` {pri} **{t['title']}** — {t['category']} | due {due} | ~{mins}"
+    due = f" | {t['due_date']}" if t["due_date"] else ""
+    return f"`#{t['id']}` {pri} {t['title']}{due}"
 
 # ---------------------------------------------------------------------------
 # Lifecycle

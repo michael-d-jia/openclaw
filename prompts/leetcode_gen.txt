@@ -8,7 +8,7 @@ Description:
 """
 
 Return ONLY a valid Java file with:
-1. A class named Solution with a block comment containing the problem title, topic, and full description
+1. A class named Solution with a block comment containing the problem title, topic, and full description. Preserve paragraph breaks and spacing in the description for readability — use blank comment lines between sections.
 2. The method signature with correct types matching the problem
 3. The method body containing only a placeholder return statement (e.g. return 0, return null, return false)
 4. A main method with 3-5 test cases based on the examples in the problem description, printing PASS/FAIL for each

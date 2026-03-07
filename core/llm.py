@@ -78,11 +78,12 @@ def parse_tasks_bulk(user_input):
 def generate_daily_plan(tasks):
     """Takes a list of task dicts, returns a formatted daily schedule string."""
     template = _load_prompt("daily_plan.txt")
-    now = datetime.now().strftime("%I:%M %p")
+    now = datetime.now()
     prompt = (
         template
         .replace("{{TASKS_JSON}}", json.dumps(tasks, indent=2))
-        .replace("{{CURRENT_TIME}}", now)
+        .replace("{{CURRENT_TIME}}", now.strftime("%I:%M %p"))
+        .replace("{{DAY_OF_WEEK}}", now.strftime("%A"))
     )
     return _call(prompt, temperature=0.4)
 
