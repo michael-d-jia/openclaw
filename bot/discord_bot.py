@@ -278,6 +278,31 @@ async def plan(ctx):
 # Git push (stub)
 # ---------------------------------------------------------------------------
 @bot.command()
+async def prep(ctx):
+    """Manually generate today's LeetCode problem."""
+    await ctx.send("🧠 Generating...")
+    try:
+        result = run_morning_prep()
+        if not result:
+            await ctx.send("❌ No pending problems. You're all caught up!")
+            return
+        if result["is_new"]:
+            push_status = "✅ Pushed to GitHub" if result["pushed"] else f"⚠️ Git push failed: {result['push_error']}"
+        else:
+            push_status = "📌 File already on GitHub"
+        msg = (
+            f"☀️ **Prep**\n\n"
+            f"**{result['title']}** ({result['difficulty']})\n"
+            f"Topic: {result['topic']}\n"
+            f"Link: {result['url']}\n"
+            f"{push_status}\n\n"
+            f"Run `git pull` to get the starter file, then `!push` when you're done."
+        )
+        await ctx.send(msg)
+    except Exception as e:
+        await ctx.send(f"❌ Failed: {e}")
+
+@bot.command()
 async def push(ctx):
     """Mark current LeetCode problem as complete."""
     try:
