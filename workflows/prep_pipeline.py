@@ -31,6 +31,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 def git_commit_and_push(filepath, message):
     """Stage a file, commit, and push from the leetcode_solutions directory."""
     try:
+        subprocess.run(["git", "pull", "--rebase"], cwd=OUTPUT_DIR, check=True, capture_output=True)
         subprocess.run(["git", "add", filepath.name], cwd=OUTPUT_DIR, check=True, capture_output=True)
         subprocess.run(["git", "commit", "-m", message], cwd=OUTPUT_DIR, check=True, capture_output=True)
         subprocess.run(["git", "push", "-u", "origin", "main"], cwd=OUTPUT_DIR, check=True, capture_output=True)
