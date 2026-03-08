@@ -111,8 +111,8 @@ async def daily_briefing():
     except Exception as e:
         await ch.send(f"📋 **Daily Briefing** — Error: {e}")
 
-scheduler.add_job(morning_prep, "cron", hour=8, minute=0)
-scheduler.add_job(daily_briefing, "cron", hour=8, minute=5)
+scheduler.add_job(morning_prep, "cron", hour=8, minute=0, misfire_grace_time=7200)
+scheduler.add_job(daily_briefing, "cron", hour=8, minute=5, misfire_grace_time=7200)
 
 # ---------------------------------------------------------------------------
 # Task commands
