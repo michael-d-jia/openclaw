@@ -290,12 +290,13 @@ async def prep(ctx):
             push_status = "✅ Pushed to GitHub" if result["pushed"] else f"⚠️ Git push failed: {result['push_error']}"
         else:
             push_status = "📌 File already on GitHub"
+        video = f"\n📺 Watch first: {result['video_url']}" if result.get("video_url") else ""
         msg = (
             f"☀️ **Prep**\n\n"
             f"**{result['title']}** ({result['difficulty']})\n"
             f"Topic: {result['topic']}\n"
             f"Link: {result['url']}\n"
-            f"{push_status}\n\n"
+            f"{push_status}{video}\n\n"
             f"Run `git pull` to get the starter file, then `!push` when you're done."
         )
         await ctx.send(msg)

@@ -185,4 +185,5 @@ def run_morning_prep():
         "pushed": success,
         "push_error": error,
         "is_new": is_new,
+        "video_url": row.get("video_url", "").strip() or None,
     }
