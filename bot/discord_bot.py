@@ -346,6 +346,32 @@ async def roadmap(ctx):
         lines.append(f"\n...and {len(pending) - 10} more pending.")
     await ctx.send("\n".join(lines))
 
+@bot.command(name="video")
+async def video(ctx):
+    with open("prep_roadmap.csv", newline="") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+
+    current = next((r for r in rows if r["status"] == "Pending"), None)
+
+    if not current:
+        await ctx.send("✅ No pending problems — roadmap complete!")
+        return
+
+    problem_name = current["leetcode_url"].rstrip("/").split("/")[-1].replace("-", " ").title()
+    video_url = current.get("video_url", "").strip()
+
+    if video_url:
+        await ctx.send(
+            f"🎥 **{problem_name}** ({current['topic']})\n"
+            f"NeetCode video: {video_url}"
+        )
+    else:
+        await ctx.send(
+            f"📺 **{problem_name}** ({current['topic']})\n"
+            f"No video linked yet. LeetCode: {current['leetcode_url']}"
+        )
+
 # ---------------------------------------------------------------------------
 # Attachment handler — syllabus PDF ingestion
 # ---------------------------------------------------------------------------
