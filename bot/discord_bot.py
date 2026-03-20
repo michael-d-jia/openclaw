@@ -348,28 +348,25 @@ async def roadmap(ctx):
 
 @bot.command(name="video")
 async def video(ctx):
-    with open("prep_roadmap.csv", newline="") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
+    from workflows.prep_pipeline import get_next_pending
+    row = get_next_pending()
 
-    current = next((r for r in rows if r["status"] == "Pending"), None)
-
-    if not current:
+    if not row:
         await ctx.send("✅ No pending problems — roadmap complete!")
         return
 
-    problem_name = current["leetcode_url"].rstrip("/").split("/")[-1].replace("-", " ").title()
-    video_url = current.get("video_url", "").strip()
+    problem_name = row["leetcode_url"].rstrip("/").split("/")[-1].replace("-", " ").title()
+    video_url = row.get("video_url", "").strip()
 
     if video_url:
         await ctx.send(
-            f"🎥 **{problem_name}** ({current['topic']})\n"
+            f"🎥 **{problem_name}** ({row['topic']})\n"
             f"NeetCode video: {video_url}"
         )
     else:
         await ctx.send(
-            f"📺 **{problem_name}** ({current['topic']})\n"
-            f"No video linked yet. LeetCode: {current['leetcode_url']}"
+            f"📺 **{problem_name}** ({row['topic']})\n"
+            f"No video linked yet. LeetCode: {row['leetcode_url']}"
         )
 
 # ---------------------------------------------------------------------------
