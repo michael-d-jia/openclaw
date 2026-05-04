@@ -1,13 +1,13 @@
 date,topic,leetcode_url,status,video_url
 2026-03-06,Monotonic Stack,https://leetcode.com/problems/daily-temperatures/,Complete,
 2026-03-07,Tree DFS,https://leetcode.com/problems/maximum-depth-of-binary-tree/,Complete,
-2026-03-09,Tree DFS,https://leetcode.com/problems/invert-binary-tree/,Pending,https://www.youtube.com/watch?v=OnSn2XEQ4MY
-2026-03-10,Sliding Window,https://leetcode.com/problems/longest-substring-without-repeating-characters/,Pending,https://www.youtube.com/watch?v=wiGpQwVHdE0
-2026-03-11,Linked List,https://leetcode.com/problems/reverse-linked-list/,Pending,https://www.youtube.com/watch?v=G0_I-ZF0S38
-2026-03-12,Tree BFS,https://leetcode.com/problems/binary-tree-level-order-traversal/,Pending,https://www.youtube.com/watch?v=6ZnyEApgFYg
-2026-03-13,Two Pointers,https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/,Pending,https://www.youtube.com/watch?v=cQ1Oz4ckceM
-2026-03-14,Two Pointers,https://leetcode.com/problems/3sum/,Pending,
-2026-03-15,Two Pointers,https://leetcode.com/problems/container-with-most-water/,Pending,
+2026-03-09,Tree DFS,https://leetcode.com/problems/invert-binary-tree/,Complete,https://www.youtube.com/watch?v=OnSn2XEQ4MY
+2026-03-10,Sliding Window,https://leetcode.com/problems/longest-substring-without-repeating-characters/,Complete,https://www.youtube.com/watch?v=wiGpQwVHdE0
+2026-03-11,Linked List,https://leetcode.com/problems/reverse-linked-list/,Complete,https://www.youtube.com/watch?v=G0_I-ZF0S38
+2026-03-12,Tree BFS,https://leetcode.com/problems/binary-tree-level-order-traversal/,Complete,https://www.youtube.com/watch?v=6ZnyEApgFYg
+2026-03-13,Two Pointers,https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/,Complete,https://www.youtube.com/watch?v=cQ1Oz4ckceM
+2026-03-14,Two Pointers,https://leetcode.com/problems/3sum/,Complete,
+2026-03-15,Two Pointers,https://leetcode.com/problems/container-with-most-water/,Complete,
 2026-03-16,Linked List,https://leetcode.com/problems/merge-two-sorted-lists/,Pending,https://www.youtube.com/watch?v=XIdigk956u0
 2026-03-17,Linked List,https://leetcode.com/problems/linked-list-cycle/,Pending,
 2026-03-18,Linked List,https://leetcode.com/problems/middle-of-the-linked-list/,Pending,
