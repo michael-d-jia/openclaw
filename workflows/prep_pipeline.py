@@ -53,10 +53,22 @@ def get_next_pending():
                 return row
     return None
 
+def _git_commit_csv(message):
+    """Commit and push prep_roadmap.csv from the main repo root."""
+    repo_root = DATA_DIR.parent
+    try:
+        subprocess.run(["git", "pull", "--rebase"], cwd=repo_root, check=True, capture_output=True)
+        subprocess.run(["git", "add", str(CSV_PATH)], cwd=repo_root, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", message], cwd=repo_root, check=True, capture_output=True)
+        subprocess.run(["git", "push", "-u", "origin", "main"], cwd=repo_root, check=True, capture_output=True)
+        return True, None
+    except subprocess.CalledProcessError as e:
+        return False, e.stderr.decode().strip()
+
 def mark_complete(leetcode_url):
-    """Set status to 'Complete' for the row matching this URL."""
+    """Set status to 'Complete' for the row matching this URL and push to GitHub."""
     if not CSV_PATH.exists():
-        return
+        return False, "CSV not found"
     rows = []
     with open(CSV_PATH, newline="") as f:
         reader = csv.DictReader(f)
@@ -69,6 +81,8 @@ def mark_complete(leetcode_url):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+    slug = _slug_from_url(leetcode_url) or leetcode_url
+    return _git_commit_csv(f"Complete: {slug}")
 
 def get_roadmap_summary():
     """Return a summary of pending/complete counts and next few problems."""

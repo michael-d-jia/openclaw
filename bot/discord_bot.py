@@ -312,8 +312,9 @@ async def push(ctx):
         if not row:
             await ctx.send("❌ No pending problem to mark complete.")
             return
-        mark_complete(row["leetcode_url"])
-        await ctx.send(f"✅ Marked **{row['topic']}** problem as complete. Nice work!")
+        success, error = mark_complete(row["leetcode_url"])
+        pushed = "and pushed to GitHub " if success else f"(GitHub push failed: {error}) "
+        await ctx.send(f"✅ Marked **{row['topic']}** problem as complete {pushed}— nice work!")
     except Exception as e:
         await ctx.send(f"❌ Failed: {e}")
 
