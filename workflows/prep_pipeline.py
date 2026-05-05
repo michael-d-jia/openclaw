@@ -1,9 +1,8 @@
 """
 Technical interview prep pipeline.
-Reads the roadmap CSV, fetches LeetCode problems, generates starter files,
+Reads from Google Sheets, fetches LeetCode problems, generates starter files,
 and pushes to GitHub.
 """
-import csv
 import re
 import html
 import subprocess
@@ -14,15 +13,14 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.llm import generate_leetcode_file
+from workflows.sheets_client import get_next_problem
 
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
 DATA_DIR = Path(__file__).parent.parent / "data"
-CSV_PATH = DATA_DIR / "prep_roadmap.csv"
 OUTPUT_DIR = DATA_DIR / "leetcode_solutions"
 
-# Ensure output dir exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -40,64 +38,6 @@ def git_commit_and_push(filepath, message):
         return False, e.stderr.decode().strip()
 
 # ---------------------------------------------------------------------------
-# CSV helpers
-# ---------------------------------------------------------------------------
-def get_next_pending():
-    """Return the first row where status == 'Pending', or None."""
-    if not CSV_PATH.exists():
-        return None
-    with open(CSV_PATH, newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row["status"].strip().lower() == "pending":
-                return row
-    return None
-
-def _git_commit_csv(message):
-    """Commit and push prep_roadmap.csv from the main repo root."""
-    repo_root = DATA_DIR.parent
-    try:
-        subprocess.run(["git", "pull", "--rebase"], cwd=repo_root, check=True, capture_output=True)
-        subprocess.run(["git", "add", str(CSV_PATH)], cwd=repo_root, check=True, capture_output=True)
-        subprocess.run(["git", "commit", "-m", message], cwd=repo_root, check=True, capture_output=True)
-        subprocess.run(["git", "push", "-u", "origin", "main"], cwd=repo_root, check=True, capture_output=True)
-        return True, None
-    except subprocess.CalledProcessError as e:
-        return False, e.stderr.decode().strip()
-
-def mark_complete(leetcode_url):
-    """Set status to 'Complete' for the row matching this URL and push to GitHub."""
-    if not CSV_PATH.exists():
-        return False, "CSV not found"
-    rows = []
-    with open(CSV_PATH, newline="") as f:
-        reader = csv.DictReader(f)
-        fieldnames = reader.fieldnames
-        for row in reader:
-            if row["leetcode_url"].strip() == leetcode_url.strip():
-                row["status"] = "Complete"
-            rows.append(row)
-    with open(CSV_PATH, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
-    slug = _slug_from_url(leetcode_url) or leetcode_url
-    return _git_commit_csv(f"Complete: {slug}")
-
-def get_roadmap_summary():
-    """Return a summary of pending/complete counts and next few problems."""
-    if not CSV_PATH.exists():
-        return None
-    pending, complete = [], []
-    with open(CSV_PATH, newline="") as f:
-        for row in csv.DictReader(f):
-            if row["status"].strip().lower() == "complete":
-                complete.append(row)
-            else:
-                pending.append(row)
-    return {"pending": pending, "complete": complete}
-
-# ---------------------------------------------------------------------------
 # LeetCode GraphQL fetcher
 # ---------------------------------------------------------------------------
 LEETCODE_GRAPHQL = "https://leetcode.com/graphql"
@@ -110,7 +50,7 @@ def _slug_from_url(url):
 
 def fetch_problem(url):
     """Fetch problem title and description from LeetCode GraphQL API.
-    Returns dict with 'title', 'description' (plain text), 'slug'."""
+    Returns dict with 'title', 'description' (plain text), 'difficulty', 'slug'."""
     slug = _slug_from_url(url)
     if not slug:
         raise ValueError(f"Could not extract problem slug from URL: {url}")
@@ -137,7 +77,6 @@ def fetch_problem(url):
     if not question:
         raise ValueError(f"Problem not found: {slug}")
 
-    # Convert HTML content to plain text (strip tags)
     raw_html = question["content"] or ""
     clean = re.sub(r"<[^>]+>", "", raw_html)
     clean = html.unescape(clean)
@@ -152,19 +91,18 @@ def fetch_problem(url):
 # ---------------------------------------------------------------------------
 # File generation
 # ---------------------------------------------------------------------------
-def generate_problem_file(problem, topic):
+def generate_problem_file(problem, category):
     """Call Gemini to generate a Java starter file. Returns (filepath, content, is_new)."""
     filename = f"{problem['slug'].replace('-', '_')}.java"
     filepath = OUTPUT_DIR / filename
 
-    # Skip generation if file already exists
     if filepath.exists():
         return filepath, filepath.read_text(), False
 
     content = generate_leetcode_file(
         problem_title=problem["title"],
         problem_description=problem["description"],
-        topic=topic,
+        topic=category,
     )
     filepath.write_text(content)
     return filepath, content, True
@@ -174,30 +112,30 @@ def generate_problem_file(problem, topic):
 # ---------------------------------------------------------------------------
 def run_morning_prep():
     """Full morning prep flow. Returns a dict with results for Discord, or None."""
-    row = get_next_pending()
+    row = get_next_problem()
     if not row:
         return None
 
-    problem = fetch_problem(row["leetcode_url"])
-    filepath, _, is_new = generate_problem_file(problem, row["topic"])
+    problem = fetch_problem(row["URL"])
+    filepath, _, is_new = generate_problem_file(problem, row["Category"])
 
-    # Only push if this is a newly generated file
     success, error = True, None
     if is_new:
         success, error = git_commit_and_push(
             filepath,
-            f"Add starter: {problem['title']} ({row['topic']})"
+            f"Add starter: {problem['title']} ({row['Category']})"
         )
 
     return {
         "title": problem["title"],
         "difficulty": problem["difficulty"],
-        "topic": row["topic"],
-        "url": row["leetcode_url"].strip(),
+        "category": row["Category"],
+        "url": row["URL"].strip(),
         "filepath": str(filepath),
         "slug": problem["slug"],
         "pushed": success,
         "push_error": error,
         "is_new": is_new,
-        "video_url": row.get("video_url", "").strip() or None,
+        "video_url": row.get("Video URL", "").strip() or None,
+        "why": row.get("Why This Problem", "").strip() or None,
     }
