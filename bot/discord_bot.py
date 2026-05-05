@@ -62,11 +62,20 @@ async def morning_prep():
             push_status = "📌 File already on GitHub"
         why = f"\n> {result['why']}" if result.get("why") else ""
         video = f"\n📺 {result['video_url']}" if result.get("video_url") else ""
+        process = (
+            "\n\n**The process:**\n"
+            "Set a 25-minute timer when you start a problem.\n"
+            "If you don't have a CLEAR APPROACH (not code — just the idea) by 25 min, stop.\n"
+            "Watch the NeetCode video or read the editorial. Understand WHY, not just HOW.\n"
+            "Close everything. Rewrite the solution from scratch without looking.\n"
+            "If you can't rewrite it, THAT'S what you didn't understand. Re-study that part.\n"
+            "Mark the problem for redo. Come back to it 3-5 days later."
+        )
         msg = (
             f"☀️ **Morning Prep**\n\n"
             f"**{result['title']}** ({result['difficulty']}) · {result['category']}\n"
             f"{result['url']}{why}\n\n"
-            f"{push_status}{video}"
+            f"{push_status}{video}{process}"
         )
         await ch.send(msg)
     except Exception as e:
