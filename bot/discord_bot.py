@@ -47,12 +47,26 @@ async def on_command_error(ctx, error):
 # ---------------------------------------------------------------------------
 # Scheduled jobs
 # ---------------------------------------------------------------------------
+_prep_cache: dict | None = None
+
+async def generate_prep():
+    """Run at 6 AM to pre-generate today's prep so the 7 AM send is instant."""
+    global _prep_cache
+    try:
+        _prep_cache = run_morning_prep()
+        print("[prep] Pre-generation complete.")
+    except Exception as e:
+        _prep_cache = None
+        print(f"[prep] Pre-generation failed: {e}")
+
 async def morning_prep():
+    global _prep_cache
     ch = bot.get_channel(BRIEFING_CHANNEL_ID)
     if not ch:
         return
     try:
-        result = run_morning_prep()
+        result = _prep_cache if _prep_cache is not None else run_morning_prep()
+        _prep_cache = None
         if not result:
             await ch.send("☀️ **Morning Prep** — No pending problems. Roadmap complete!")
             return
@@ -81,6 +95,7 @@ async def morning_prep():
     except Exception as e:
         await ch.send(f"☀️ **Morning Prep** — Error: {e}")
 
+scheduler.add_job(generate_prep, "cron", hour=5, minute=0, misfire_grace_time=3600)
 scheduler.add_job(morning_prep, "cron", hour=7, minute=0, misfire_grace_time=7200)
 
 # ---------------------------------------------------------------------------
